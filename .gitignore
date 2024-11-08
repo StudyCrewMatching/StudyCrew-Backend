@@ -1,0 +1,13 @@
+# 빌드 출력 폴더
+/target/
+/build/
+
+# OS별 시스템 파일
+.DS_Store
+Thumbs.db
+
+# 로그 파일
+*.log
+
+# 환경 설정 파일
+application-dev.properties
