@@ -1,6 +1,10 @@
 package com.studycrew.studycrew_backend.domain.profile.user;
 
+import java.util.List;
 import java.util.Set;
+
+import com.studycrew.studycrew_backend.domain.profile.user.dto.UserRegistrationDto;
+import com.studycrew.studycrew_backend.domain.tag.SkillSet;
 
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -29,21 +33,29 @@ public class User {
 
 	private String info;
 
-	@ElementCollection
-	private Set<String> skills;
+	private List<SkillSet> skills;
 
-	@OneToMany(mappedBy = "user")
-	private List<Team> teamsOwned;
-
-	@ManyToMany
-	private List<Team> teamsJoined;
+	// @OneToMany(mappedBy = "user")
+	// private List<Team> teamsOwned;
+	//
+	// @ManyToMany
+	// private List<Team> teamsJoined;
 
 	@Builder(access = AccessLevel.PRIVATE)
-	public User(Long id, String email, String username, String info, Set<String> skills) {
+	private User(Long id, String email, String username, String info, List<SkillSet> skills) {
 		this.id = id;
 		this.email = email;
 		this.username = username;
 		this.info = info;
 		this.skills = skills;
+	}
+
+	public static User of(UserRegistrationDto userRegistrationDto) {
+		return User.builder()
+			.email(userRegistrationDto.getEmail())
+			.username(userRegistrationDto.getUsername())
+			.info(userRegistrationDto.getInfo())
+			.skills(userRegistrationDto.getSkills())
+			.build();
 	}
 }
