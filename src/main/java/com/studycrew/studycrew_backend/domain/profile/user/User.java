@@ -13,6 +13,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,19 +39,18 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private List<SkillType> skills = new ArrayList<>();
 
-	// @OneToMany(mappedBy = "user")
-	// private List<Team> teamsOwned;
-	//
-	// @ManyToMany
-	// private List<Team> teamsJoined;
+	@ManyToOne
+	@JoinColumn(name = "teamId")
+	private Team team;
 
 	@Builder(access = AccessLevel.PRIVATE)
-	private User(Long id, String email, String username, String info, List<SkillType> skills) {
+	private User(Long id, String email, String username, String info, List<SkillType> skills, Team team) {
 		this.id = id;
 		this.email = email;
 		this.username = username;
 		this.info = info;
 		this.skills = skills;
+		this.team = team;
 	}
 
 	public static User of(UserRegistrationDto userRegistrationDto) {
