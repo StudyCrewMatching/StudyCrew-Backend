@@ -1,6 +1,8 @@
 package com.studycrew.studycrew_backend.api.user;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,5 +25,11 @@ public class UserController {
 	public ResponseEntity<?> register(@RequestBody UserRegistrationDto registrationDto) {
 		UserResponseDto userResponseDto = userService.register(registrationDto);
 		return ResponseEntity.ok(userResponseDto);
+	}
+
+	@PostMapping("/delete/{userId}")
+	public ResponseEntity<?> delete(@PathVariable Long userId) {
+		userService.delete(userId);
+		return ResponseEntity.ok().build();
 	}
 }

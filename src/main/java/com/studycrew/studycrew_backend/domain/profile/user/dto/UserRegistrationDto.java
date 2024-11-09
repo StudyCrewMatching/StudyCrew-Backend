@@ -1,12 +1,11 @@
 package com.studycrew.studycrew_backend.domain.profile.user.dto;
 
 import java.util.List;
-import java.util.Set;
 
-import org.springframework.validation.annotation.Validated;
+import com.studycrew.studycrew_backend.domain.tag.skill.SkillType;
 
-import com.studycrew.studycrew_backend.domain.tag.SkillSet;
-
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 
 @Getter
@@ -18,5 +17,6 @@ public class UserRegistrationDto {
 
 	private String info;
 
-	private List<SkillSet> skills;
+	@Enumerated(EnumType.STRING)
+	private List<SkillType> skills;
 }
