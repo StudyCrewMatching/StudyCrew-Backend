@@ -1,13 +1,16 @@
 package com.studycrew.studycrew_backend.domain.profile.team;
 
 import com.studycrew.studycrew_backend.domain.profile.team.dto.TeamRegistrationDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.studycrew.studycrew_backend.domain.tag.meetingmode.MeetingModeType;
+import com.studycrew.studycrew_backend.domain.tag.position.PositionType;
+import com.studycrew.studycrew_backend.domain.tag.skill.SkillType;
+import com.studycrew.studycrew_backend.domain.tag.status.TeamStatus;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,8 +28,8 @@ public class Team {
 
     private String description;
 
-    // TODO: 태그(enum)로 변경 예정
-    private String meetingFormat;
+    @Enumerated(EnumType.STRING)
+    private MeetingModeType meetingMode;
 
     private Integer weeklyMeetingCount;
 
@@ -38,21 +41,34 @@ public class Team {
 
     private Integer teamSize;
 
-    // TODO: 태그(enum)로 변경 예정
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private TeamStatus status;
+
+    @ElementCollection(targetClass = PositionType.class)
+    @Enumerated(EnumType.STRING)
+    private List<PositionType> positions = new ArrayList<>();
+
+    @ElementCollection(targetClass = SkillType.class)
+    @Enumerated(EnumType.STRING)
+    private List<SkillType> skills = new ArrayList<>();
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Team(Long ownerId, String name, String description, String meetingFormat, Integer weeklyMeetingCount, String location, LocalDate startDate, LocalDate endDate, Integer teamSize, String status) {
-        this.ownerId = null;
+    private Team(Long ownerId, String name, String description, MeetingModeType meetingMode,
+                 Integer weeklyMeetingCount, String location, LocalDate startDate, LocalDate endDate,
+                 Integer teamSize, TeamStatus status,
+                 List<PositionType> positions, List<SkillType> skills) {
+        this.ownerId = ownerId;
         this.name = name;
         this.description = description;
-        this.meetingFormat = meetingFormat;
+        this.meetingMode = meetingMode;
         this.weeklyMeetingCount = weeklyMeetingCount;
         this.location = location;
         this.startDate = startDate;
         this.endDate = endDate;
         this.teamSize = teamSize;
         this.status = status;
+        this.positions = positions;
+        this.skills = skills;
     }
 
     public static Team of(TeamRegistrationDto teamRegistrationDto) {
@@ -60,13 +76,27 @@ public class Team {
                 .ownerId(teamRegistrationDto.getOwnerId())
                 .name(teamRegistrationDto.getName())
                 .description(teamRegistrationDto.getDescription())
-                .meetingFormat(teamRegistrationDto.getMeetingFormat())
+                .meetingMode(MeetingModeType.valueOf(teamRegistrationDto.getMeetingMode()))
                 .weeklyMeetingCount(teamRegistrationDto.getWeeklyMeetingCount())
                 .location(teamRegistrationDto.getLocation())
                 .startDate(teamRegistrationDto.getStartDate())
                 .endDate(teamRegistrationDto.getEndDate())
                 .teamSize(teamRegistrationDto.getTeamSize())
-//                .status()
+                .status(TeamStatus.OPEN)
+                .positions(convertPositionType(teamRegistrationDto.getPositions()))
+                .skills(convertSkillType(teamRegistrationDto.getSkills()))
                 .build();
+    }
+
+    private static List<PositionType> convertPositionType(List<String> positions) {
+        return positions.stream()
+                .map(PositionType::valueOf)
+                .toList();
+    }
+
+    private static List<SkillType> convertSkillType(List<String> skills) {
+        return skills.stream()
+                .map(SkillType::valueOf)
+                .toList();
     }
 }

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 public class TeamRegistrationDto {
@@ -20,7 +21,7 @@ public class TeamRegistrationDto {
     private String description;
 
     @NotBlank(message = "온라인/오프라인 선택은 필수입니다.")
-    private String meetingFormat;
+    private String meetingMode;
 
     @NotNull(message = "주간 미팅 수는 필수입니다.")
     @Min(value = 1, message = "주간 미팅은 1회 이상이어야 합니다.")
@@ -37,4 +38,8 @@ public class TeamRegistrationDto {
     @NotNull(message = "크루 총 인원은 필수입니다.")
     @Min(value = 1, message = "인원은 1명 이상이어야 합니다.")
     private Integer teamSize;
+
+    private List<String> positions;
+
+    private List<String> skills;
 }
