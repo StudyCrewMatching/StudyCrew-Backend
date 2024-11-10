@@ -11,9 +11,9 @@ import java.util.List;
 @Getter
 public class TeamRegistrationDto {
 
-    @NotNull(message = "사용자 아이디는 필수입니다.")
-    @Min(value = 1, message = "사용자 아이디는 1 이상이어야 합니다.")
-    private Long ownerId;
+    @NotNull(message = "팀 리더 아이디는 필수입니다.")
+    @Min(value = 1, message = "팀 리더 아이디는 1 이상이어야 합니다.")
+    private Long leaderId;
 
     @NotBlank(message = "팀명은 필수입니다.")
     private String name;

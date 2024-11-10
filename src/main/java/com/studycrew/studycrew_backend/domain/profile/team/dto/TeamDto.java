@@ -1,6 +1,8 @@
 package com.studycrew.studycrew_backend.domain.profile.team.dto;
 
 import com.studycrew.studycrew_backend.domain.profile.team.Team;
+import com.studycrew.studycrew_backend.domain.profile.user.User;
+import com.studycrew.studycrew_backend.domain.profile.user.dto.UserSimpleProfileDto;
 import com.studycrew.studycrew_backend.domain.tag.position.PositionType;
 import com.studycrew.studycrew_backend.domain.tag.skill.SkillType;
 import com.studycrew.studycrew_backend.domain.tag.status.TeamStatus;
@@ -13,7 +15,9 @@ import java.util.List;
 
 public class TeamDto {
 
-    private Long ownerId;
+    private UserSimpleProfileDto leader;
+
+    private List<UserSimpleProfileDto> members;
 
     private String name;
 
@@ -38,11 +42,13 @@ public class TeamDto {
     private List<SkillType> skills = new ArrayList<>();
 
     @Builder(access = AccessLevel.PRIVATE)
-    private TeamDto(Long ownerId, String name, String description, String meetingMode,
+    private TeamDto(UserSimpleProfileDto leader, List<UserSimpleProfileDto> members,
+                    String name, String description, String meetingMode,
                     Integer weeklyMeetingCount, String location, LocalDate startDate, LocalDate endDate,
                     Integer teamSize, TeamStatus teamStatus,
                     List<PositionType> positions, List<SkillType> skills) {
-        this.ownerId = ownerId;
+        this.leader = leader;
+        this.members = members;
         this.name = name;
         this.description = description;
         this.meetingMode = meetingMode;
@@ -58,7 +64,8 @@ public class TeamDto {
 
     public static TeamDto of(Team team) {
         return TeamDto.builder()
-                .ownerId(team.getOwnerId())
+                .leader(UserSimpleProfileDto.of(team.getLeader()))
+                .members(convertUserSimpleProfileDtos(team.getMembers()))
                 .name(team.getName())
                 .description(team.getDescription())
                 .meetingMode(String.valueOf(team.getMeetingMode()))
@@ -69,5 +76,11 @@ public class TeamDto {
                 .teamSize(team.getTeamSize())
                 .teamStatus(team.getStatus())
                 .build();
+    }
+
+    private static List<UserSimpleProfileDto> convertUserSimpleProfileDtos(List<User> members) {
+        return members.stream()
+                .map(UserSimpleProfileDto::of)
+                .toList();
     }
 }

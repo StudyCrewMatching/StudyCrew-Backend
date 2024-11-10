@@ -1,12 +1,14 @@
 package com.studycrew.studycrew_backend.domain.profile.team;
 
 import com.studycrew.studycrew_backend.domain.profile.team.dto.TeamRegistrationDto;
+import com.studycrew.studycrew_backend.domain.profile.user.User;
 import com.studycrew.studycrew_backend.domain.tag.meetingmode.MeetingModeType;
 import com.studycrew.studycrew_backend.domain.tag.position.PositionType;
 import com.studycrew.studycrew_backend.domain.tag.skill.SkillType;
 import com.studycrew.studycrew_backend.domain.tag.status.TeamStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,7 +24,12 @@ public class Team {
     private Long id;
 
     // TODO user 타입으로 변경 예정
-    private Long ownerId;
+    @OneToOne
+    @JoinColumn(name = "leader_id")
+    private User leader;
+
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<User> members = new ArrayList<>();
 
     private String name;
 
@@ -53,11 +60,11 @@ public class Team {
     private List<SkillType> skills = new ArrayList<>();
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Team(Long ownerId, String name, String description, MeetingModeType meetingMode,
+    private Team(User leader, List<User> members, String name, String description, MeetingModeType meetingMode,
                  Integer weeklyMeetingCount, String location, LocalDate startDate, LocalDate endDate,
-                 Integer teamSize, TeamStatus status,
-                 List<PositionType> positions, List<SkillType> skills) {
-        this.ownerId = ownerId;
+                 Integer teamSize, TeamStatus status, List<PositionType> positions, List<SkillType> skills) {
+        this.leader = leader;
+        this.members = members;
         this.name = name;
         this.description = description;
         this.meetingMode = meetingMode;
@@ -71,9 +78,9 @@ public class Team {
         this.skills = skills;
     }
 
-    public static Team of(TeamRegistrationDto teamRegistrationDto) {
+    public static Team of(TeamRegistrationDto teamRegistrationDto, User leader) {
         return Team.builder()
-                .ownerId(teamRegistrationDto.getOwnerId())
+                .leader(leader)
                 .name(teamRegistrationDto.getName())
                 .description(teamRegistrationDto.getDescription())
                 .meetingMode(MeetingModeType.valueOf(teamRegistrationDto.getMeetingMode()))
@@ -98,5 +105,23 @@ public class Team {
         return skills.stream()
                 .map(SkillType::valueOf)
                 .toList();
+    }
+
+    @Transactional
+    public void addMember(User user) {
+        if(members.contains(user)) {
+            throw new IllegalArgumentException("Already a member of this team");
+        }
+        if(members.size() + 1 == teamSize) {
+            throw new IllegalArgumentException("The team is full");
+        }
+        members.add(user);
+    }
+
+    public void removeMember(User user) {
+        if(!members.contains(user)) {
+            throw new IllegalArgumentException("Not a member of this team");
+        }
+        members.remove(user);
     }
 }
