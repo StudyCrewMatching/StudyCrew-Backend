@@ -124,4 +124,17 @@ public class Team {
         }
         members.remove(user);
     }
+
+    @Transactional
+    public void changeLeader(User newLeader) {
+        if(!members.contains(newLeader)) {
+            throw new IllegalArgumentException("Not a member of this team");
+        }
+        User prevLeader = this.leader;
+        this.leader = newLeader;
+        if(!members.contains(prevLeader)) {
+            members.add(prevLeader);
+        }
+        members.remove(newLeader);
+    }
 }
