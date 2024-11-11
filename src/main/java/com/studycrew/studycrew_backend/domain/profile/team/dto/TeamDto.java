@@ -12,6 +12,7 @@ import lombok.Builder;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class TeamDto {
 
@@ -75,12 +76,16 @@ public class TeamDto {
                 .endDate(team.getEndDate())
                 .teamSize(team.getTeamSize())
                 .teamStatus(team.getStatus())
+                .positions(team.getPositions())
+                .skills(team.getSkills())
                 .build();
     }
 
     private static List<UserSimpleProfileDto> convertUserSimpleProfileDtos(List<User> members) {
-        return members.stream()
-                .map(UserSimpleProfileDto::of)
-                .toList();
+        return Optional.ofNullable(members)
+                .map(list -> list.stream()
+                        .map(UserSimpleProfileDto::of)
+                        .toList())
+                .orElse(null);
     }
 }
