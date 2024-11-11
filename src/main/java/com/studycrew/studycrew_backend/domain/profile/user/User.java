@@ -63,16 +63,23 @@ public class User {
 			.build();
 	}
 
+<<<<<<< HEAD
 	public boolean hasTeam() {
 		return this.team != null;
 	}
 
+=======
+>>>>>>> dev
 	public void assignTeam(Team newTeam) {
 		if(newTeam == null) {
 			this.team = null;
 			return;
 		}
+<<<<<<< HEAD
 		if(hasTeam()) {
+=======
+		if(this.team != null) {
+>>>>>>> dev
 			throw new IllegalArgumentException("User already has a team");
 		}
 		this.team = newTeam;

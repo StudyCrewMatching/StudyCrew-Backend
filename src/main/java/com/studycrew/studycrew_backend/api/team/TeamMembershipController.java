@@ -60,6 +60,10 @@ public class TeamMembershipController {
     public ResponseEntity<?> changeTeamLeader(@PathVariable @Valid @Positive(message = "팀 아이디는 1 이상이어야 합니다.") Long teamId,
                                               @RequestBody @Valid TeamLeaderChangeRequestDto teamLeaderChangeRequestDto) {
         teamMembershipService.changeLeader(teamId, teamLeaderChangeRequestDto);
+<<<<<<< HEAD
         return ResponseEntity.ok().body("팀 리더가 변경되었습니다.");
+=======
+        return ResponseEntity.ok().body("팀 리더가 변겯외었습니다.");
+>>>>>>> dev
     }
 }

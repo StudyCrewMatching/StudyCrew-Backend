@@ -1,5 +1,5 @@
 package com.studycrew.studycrew_backend.domain.tag.status;
 
-public enum Status {
+public enum TeamStatus {
 	OPEN, CLOSED
 }
