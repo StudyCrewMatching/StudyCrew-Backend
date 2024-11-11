@@ -2,6 +2,7 @@ package com.studycrew.studycrew_backend.api.user;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +40,18 @@ public class UserController {
 	public ResponseEntity<?> register(@RequestBody UserRegistrationDto registrationDto) {
 		UserResponseDto userResponseDto = userService.register(registrationDto);
 		return ResponseEntity.ok(userResponseDto);
+	}
+
+	@Operation(summary = "사용자 조회", description = "사용자 ID로 사용자를 조회합니다.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "사용자 조회 성공", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
+		@ApiResponse(responseCode = "400", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
+		@ApiResponse(responseCode = "500", description = "서버 오류 발생", content = @Content(schema = @Schema(implementation = Exception.class)))
+	})
+	@GetMapping("/teams/{userId}")
+	public ResponseEntity<?> findTeamById(@PathVariable @Positive(message = "유저 아이디는 1 이상이어야 합니다.") Long userId) {
+		UserResponseDto userDto = userService.findById(userId);
+		return ResponseEntity.ok(userDto);
 	}
 
 	@Operation(summary = "사용자 삭제", description = "팀에 가입되어있지 않은 경우 사용자를 삭제합니다")

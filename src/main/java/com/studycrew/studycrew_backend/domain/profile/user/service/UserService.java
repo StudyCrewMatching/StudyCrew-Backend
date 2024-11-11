@@ -26,6 +26,13 @@ public class UserService {
 		return UserResponseDto.of(user);
 	}
 
+	@Transactional(readOnly = true)
+	public UserResponseDto findById(Long userId) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new IllegalArgumentException("User not found"));
+		return UserResponseDto.of(user);
+	}
+
 	@Transactional
 	public void delete(Long userId) {
 		User user = userRepository.findById(userId)
