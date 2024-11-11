@@ -25,7 +25,7 @@ public class TeamMembershipService {
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         team.addMember(member);
-        // member.setTeam(team);
+        member.assignTeam(team);
     }
 
     @Transactional
@@ -37,7 +37,7 @@ public class TeamMembershipService {
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         team.removeMember(member);
-        // member.setTeam(null);
+        member.assignTeam(null);
     }
 
     // TODO: 팀 변경 권한은 리더만 가능 -> security 적용 여부 확인

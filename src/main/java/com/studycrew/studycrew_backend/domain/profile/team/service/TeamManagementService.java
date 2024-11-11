@@ -27,6 +27,13 @@ public class TeamManagementService {
         return TeamDto.of(team);
     }
 
+    public TeamDto findTeamById(Long teamId) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new IllegalArgumentException("Team not found"));
+
+        return TeamDto.of(team);
+    }
+
     @Transactional
     public void delete(Long teamId, Long leaderId) {
         Team team = teamRepository.findByIdAndLeaderId(teamId, leaderId)

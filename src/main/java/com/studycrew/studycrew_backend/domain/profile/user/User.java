@@ -3,6 +3,7 @@ package com.studycrew.studycrew_backend.domain.profile.user;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.studycrew.studycrew_backend.domain.profile.team.Team;
 import com.studycrew.studycrew_backend.domain.profile.user.dto.UserRegistrationDto;
 import com.studycrew.studycrew_backend.domain.tag.skill.SkillType;
 
@@ -60,5 +61,16 @@ public class User {
 			.info(userRegistrationDto.getInfo())
 			.skills(userRegistrationDto.getSkills())
 			.build();
+	}
+
+	public void assignTeam(Team newTeam) {
+		if(newTeam == null) {
+			this.team = null;
+			return;
+		}
+		if(this.team != null) {
+			throw new IllegalArgumentException("User already has a team");
+		}
+		this.team = newTeam;
 	}
 }

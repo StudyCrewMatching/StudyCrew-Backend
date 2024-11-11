@@ -8,11 +8,14 @@ import com.studycrew.studycrew_backend.domain.tag.skill.SkillType;
 import com.studycrew.studycrew_backend.domain.tag.status.TeamStatus;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+@Getter
 public class TeamDto {
 
     private UserSimpleProfileDto leader;
@@ -75,12 +78,16 @@ public class TeamDto {
                 .endDate(team.getEndDate())
                 .teamSize(team.getTeamSize())
                 .teamStatus(team.getStatus())
+                .positions(team.getPositions())
+                .skills(team.getSkills())
                 .build();
     }
 
     private static List<UserSimpleProfileDto> convertUserSimpleProfileDtos(List<User> members) {
-        return members.stream()
-                .map(UserSimpleProfileDto::of)
-                .toList();
+        return Optional.ofNullable(members)
+                .map(list -> list.stream()
+                        .map(UserSimpleProfileDto::of)
+                        .toList())
+                .orElse(new ArrayList<>());
     }
 }
