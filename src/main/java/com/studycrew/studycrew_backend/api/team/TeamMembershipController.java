@@ -24,7 +24,7 @@ public class TeamMembershipController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/register/{teamId}/{userId}")
+    @PostMapping("/remove/{teamId}/{userId}")
     public ResponseEntity<?> removeUserFromTeam(@PathVariable @Valid @Positive(message = "팀 아이디는 1 이상이어야 합니다.") Long teamId,
                                                 @PathVariable @Valid @Positive(message = "사용자 아이디는 1 이상이어야 합니다.") Long userId) {
         teamMembershipService.removeMemberFromTeam(teamId, userId);
