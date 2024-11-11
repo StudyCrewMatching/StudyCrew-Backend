@@ -4,7 +4,9 @@ import com.studycrew.studycrew_backend.domain.profile.user.User;
 import com.studycrew.studycrew_backend.domain.tag.position.PositionType;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class UserSimpleProfileDto {
 
     private String username;
