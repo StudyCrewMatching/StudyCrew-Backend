@@ -21,20 +21,20 @@ public class TeamMembershipController {
     public ResponseEntity<?> addUserToTeam(@PathVariable @Valid @Positive(message = "팀 아이디는 1 이상이어야 합니다.") Long teamId,
                                            @PathVariable @Valid @Positive(message = "사용자 아이디는 1 이상이어야 합니다.") Long userId) {
         teamMembershipService.addMemberToTeam(teamId, userId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body("팀에 추가되었습니다.");
     }
 
-    @PostMapping("/remove/{teamId}/{userId}")
+    @DeleteMapping("/delete/{teamId}/{userId}")
     public ResponseEntity<?> removeUserFromTeam(@PathVariable @Valid @Positive(message = "팀 아이디는 1 이상이어야 합니다.") Long teamId,
                                                 @PathVariable @Valid @Positive(message = "사용자 아이디는 1 이상이어야 합니다.") Long userId) {
         teamMembershipService.removeMemberFromTeam(teamId, userId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body("팀을 탈퇴했습니다.");
     }
 
     @PutMapping("/teams/{teamId}/leader")
     public ResponseEntity<?> changeTeamLeader(@PathVariable @Valid @Positive(message = "팀 아이디는 1 이상이어야 합니다.") Long teamId,
                                               @RequestBody @Valid TeamLeaderChangeRequestDto teamLeaderChangeRequestDto) {
         teamMembershipService.changeLeader(teamId, teamLeaderChangeRequestDto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body("팀 리더가 변겯외었습니다.");
     }
 }

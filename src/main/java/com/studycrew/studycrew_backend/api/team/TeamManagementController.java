@@ -30,7 +30,7 @@ public class TeamManagementController {
         return ResponseEntity.ok(teamDto);
     }
 
-    @PostMapping("/delete/{ownerId}/{teamId}")
+    @DeleteMapping("/delete/{ownerId}/{teamId}")
     public ResponseEntity<?> delete(@PathVariable @Valid @Positive(message = "사용자 아이디는 1 이상이어야 합니다.") Long ownerId,
                                     @PathVariable @Valid @Positive(message = "팀 아이디는 1 이상이어야 합니다.") Long teamId) {
         teamManagementService.delete(ownerId, teamId);
