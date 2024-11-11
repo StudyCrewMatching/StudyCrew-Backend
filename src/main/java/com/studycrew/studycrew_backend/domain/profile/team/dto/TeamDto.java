@@ -88,6 +88,6 @@ public class TeamDto {
                 .map(list -> list.stream()
                         .map(UserSimpleProfileDto::of)
                         .toList())
-                .orElse(null);
+                .orElse(new ArrayList<>());
     }
 }
