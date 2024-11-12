@@ -26,8 +26,22 @@ public class UserService {
 		return UserResponseDto.of(user);
 	}
 
+	@Transactional(readOnly = true)
+	public UserResponseDto findById(Long userId) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new IllegalArgumentException("User not found"));
+		return UserResponseDto.of(user);
+	}
+
 	@Transactional
 	public void delete(Long userId) {
-		userRepository.deleteById(userId);
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+		if (user.hasTeam()) {
+			throw new IllegalArgumentException("Users who are part of a team cannot be deleted");
+		}
+
+		userRepository.delete(user);
 	}
 }
