@@ -55,10 +55,10 @@ public class TeamManagementController {
             @ApiResponse(responseCode = "400", description = "존재하지 않는 팀이거나, 삭제를 요청한 사용자가 팀 리더가 아니면 팀 삭제 불가", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 발생", content = @Content(schema = @Schema(implementation = Exception.class)))
     })
-    @DeleteMapping("/delete/{ownerId}/{teamId}")
-    public ResponseEntity<?> delete(@PathVariable @Valid @Positive(message = "사용자 아이디는 1 이상이어야 합니다.") Long ownerId,
+    @DeleteMapping("/delete/{leaderId}/{teamId}")
+    public ResponseEntity<?> delete(@PathVariable @Valid @Positive(message = "사용자 아이디는 1 이상이어야 합니다.") Long leaderId,
                                     @PathVariable @Valid @Positive(message = "팀 아이디는 1 이상이어야 합니다.") Long teamId) {
-        teamManagementService.delete(ownerId, teamId);
+        teamManagementService.delete(leaderId, teamId);
         return ResponseEntity.ok().body("팀이 삭제되었습니다.");
     }
 }
