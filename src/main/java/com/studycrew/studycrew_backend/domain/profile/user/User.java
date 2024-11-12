@@ -16,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,6 +45,9 @@ public class User {
 	@JoinColumn(name = "teamId")
 	private Team team;
 
+	@OneToOne(mappedBy = "leader")
+	private Team leadingTeam;
+
 	@Builder(access = AccessLevel.PRIVATE)
 	private User(Long id, String email, String username, String info, List<SkillType> skills, Team team) {
 		this.id = id;
@@ -63,25 +67,20 @@ public class User {
 			.build();
 	}
 
-<<<<<<< HEAD
 	public boolean hasTeam() {
 		return this.team != null;
 	}
 
-=======
->>>>>>> dev
 	public void assignTeam(Team newTeam) {
 		if(newTeam == null) {
 			this.team = null;
 			return;
 		}
-<<<<<<< HEAD
+
 		if(hasTeam()) {
-=======
-		if(this.team != null) {
->>>>>>> dev
 			throw new IllegalArgumentException("User already has a team");
 		}
+
 		this.team = newTeam;
 	}
 }
